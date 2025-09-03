@@ -1,5 +1,3 @@
-// This is the boilerplate code given for you
-// You can modify this code
 // Product data
 const products = [
   { id: 1, name: "Product 1", price: 10 },
@@ -11,6 +9,7 @@ const products = [
 
 // DOM elements
 const productList = document.getElementById("product-list");
+const cartList = document.getElementById("cart-list"); // Added cartList
 
 // Render product list
 function renderProducts() {
@@ -22,7 +21,6 @@ function renderProducts() {
 }
 
 const addToCart = () => {
-
   const addToCartBtn = document.querySelectorAll(".add-to-cart-btn");
   addToCartBtn.forEach((btn) => {
     btn.addEventListener("click", (e) => {
@@ -41,26 +39,18 @@ const addToCart = () => {
 const renderCart = (product) => {
   const li = document.createElement("li");
   li.innerHTML = `${product.name} - $${product.price}`;
-  cartList.appendChild(li);
+  cartList.appendChild(li); // Uses defined cartList
 };
+
+function clearCart() {
+  cartList.innerHTML = ""; // Uses defined cartList
+  window.sessionStorage.clear();
+}
 
 // Call on DOM load
 document.addEventListener("DOMContentLoaded", () => {
-  renderProducts(); // Existing function to render products
+  renderProducts();
   addToCart();
-});
-
-
-
-function clearCart() {
-  const cartList = document.getElementById("cart-list");
-  cartList.innerHTML = ""; // Clear cart list
-  // sessionStorage.setItem("cart", JSON.stringify([])); 
-  window.sessionStorage.clear()
-}
-
-// Add event listener for clear cart button
-document.addEventListener("DOMContentLoaded", () => {
   const clearCartBtn = document.getElementById("clear-cart-btn");
   clearCartBtn.addEventListener("click", clearCart);
 });
