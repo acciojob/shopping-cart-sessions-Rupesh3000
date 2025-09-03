@@ -9,7 +9,7 @@ const products = [
 
 // DOM elements
 const productList = document.getElementById("product-list");
-const cartList = document.getElementById("cart-list"); // Added cartList
+const cartList = document.getElementById("cart-list");
 
 // Render product list
 function renderProducts() {
@@ -28,7 +28,7 @@ const addToCart = () => {
       const product = products.find((p) => p.id == productId);
       // Add to sessionStorage
       let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
-      cart.push(product);
+      cart.push(product); // Allow duplicates as test expects Product 1 twice
       sessionStorage.setItem("cart", JSON.stringify(cart));
       // Render to cart list
       renderCart(product);
@@ -39,17 +39,24 @@ const addToCart = () => {
 const renderCart = (product) => {
   const li = document.createElement("li");
   li.innerHTML = `${product.name} - $${product.price}`;
-  cartList.appendChild(li); // Uses defined cartList
+  cartList.appendChild(li);
 };
 
 function clearCart() {
-  cartList.innerHTML = ""; // Uses defined cartList
-  window.sessionStorage.clear();
+  cartList.innerHTML = "";
+  sessionStorage.setItem("cart", JSON.stringify([])); // Changed to clear only cart key
+}
+
+// Render cart from sessionStorage on load
+function loadCart() {
+  const cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+  cart.forEach((product) => renderCart(product));
 }
 
 // Call on DOM load
 document.addEventListener("DOMContentLoaded", () => {
   renderProducts();
+  loadCart(); // Load saved cart
   addToCart();
   const clearCartBtn = document.getElementById("clear-cart-btn");
   clearCartBtn.addEventListener("click", clearCart);
