@@ -21,18 +21,46 @@ function renderProducts() {
   });
 }
 
-// Render cart list
-function renderCart() {}
+const addToCart = () => {
 
-// Add item to cart
-function addToCart(productId) {}
+  const addToCartBtn = document.querySelectorAll(".add-to-cart-btn");
+  addToCartBtn.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      const productId = e.target.dataset.id;
+      const product = products.find((p) => p.id == productId);
+      // Add to sessionStorage
+      let cart = JSON.parse(sessionStorage.getItem("cart")) || [];
+      cart.push(product);
+      sessionStorage.setItem("cart", JSON.stringify(cart));
+      // Render to cart list
+      renderCart(product);
+    });
+  });
+};
 
-// Remove item from cart
-function removeFromCart(productId) {}
+const renderCart = (product) => {
+  const li = document.createElement("li");
+  li.innerHTML = `${product.name} - $${product.price}`;
+  cartList.appendChild(li);
+};
 
-// Clear cart
-function clearCart() {}
+// Call on DOM load
+document.addEventListener("DOMContentLoaded", () => {
+  renderProducts(); // Existing function to render products
+  addToCart();
+});
 
-// Initial render
-renderProducts();
-renderCart();
+
+
+function clearCart() {
+  const cartList = document.getElementById("cart-list");
+  cartList.innerHTML = ""; // Clear cart list
+  // sessionStorage.setItem("cart", JSON.stringify([])); 
+  window.sessionStorage.clear()
+}
+
+// Add event listener for clear cart button
+document.addEventListener("DOMContentLoaded", () => {
+  const clearCartBtn = document.getElementById("clear-cart-btn");
+  clearCartBtn.addEventListener("click", clearCart);
+});
